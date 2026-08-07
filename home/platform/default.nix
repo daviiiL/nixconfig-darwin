@@ -1,0 +1,5 @@
+{
+  imports = [
+    ./darwin-applications.nix
+  ];
+}
