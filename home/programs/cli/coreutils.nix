@@ -18,6 +18,8 @@ in {
       fzf
       zip
       unzip
+      watch
+      opencode
     ];
   };
 }
