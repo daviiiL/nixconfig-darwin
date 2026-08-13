@@ -8,6 +8,7 @@
       cli.coreutils.enable = true;
       cli.networking.enable = true;
       development.direnv.enable = true;
+      development.devenv.enable = true;
       development.git.enable = true;
       development.aws.enable = true;
       development.languages.enable = true;
