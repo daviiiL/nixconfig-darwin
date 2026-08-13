@@ -14,6 +14,7 @@ in {
       nodejs
       dart
       tree-sitter
+      tectonic
     ];
   };
 }
