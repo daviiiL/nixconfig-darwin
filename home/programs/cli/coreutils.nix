@@ -18,6 +18,7 @@ in {
       fzf
       zip
       unzip
+      p7zip
       watch
       opencode
     ];
