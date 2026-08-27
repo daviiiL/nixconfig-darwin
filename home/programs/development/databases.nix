@@ -12,6 +12,7 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages = [
       pkgs.mariadb.client
+      pkgs.postgresql
     ];
   };
 }
