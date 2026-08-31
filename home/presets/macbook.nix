@@ -15,6 +15,7 @@
       development.databases.enable = true;
       editors.nixvim.enable = true;
       terminals.tmux.enable = true;
+      terminals.zellij.enable = true;
     };
 
     # Enable as leaf modules get ported from the linux config:
