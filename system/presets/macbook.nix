@@ -4,6 +4,7 @@
     ../hardware/darwin.nix
     ../security/darwin.nix
     ../packages/core.nix
+    ../packages/homebrew.nix
   ];
 
   localSystem = {
@@ -11,5 +12,12 @@
     hardware.darwin.enable = lib.mkDefault true;
     security.darwin.enable = lib.mkDefault true;
     packages.core.enable = lib.mkDefault true;
+    packages.homebrew = {
+      enable = lib.mkDefault true;
+      brews = [
+        "neovim"
+        "teamookla/speedtest/speedtest"
+      ];
+    };
   };
 }

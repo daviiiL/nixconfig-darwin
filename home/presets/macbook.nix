@@ -13,7 +13,8 @@
       development.aws.enable = true;
       development.languages.enable = true;
       development.databases.enable = true;
-      editors.nixvim.enable = true;
+      # editors.nixvim.enable = true;
+      terminals.ripgrep.enable = true;
       terminals.tmux.enable = true;
       terminals.zellij.enable = true;
     };

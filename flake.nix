@@ -14,7 +14,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixviii.url = "github:daviiiL/nixviii";
+    # nixviii.url = "github:daviiiL/nixviii";
+
+    # Homebrew: nix-homebrew installs and pins the prefix; taps are pinned as
+    # non-flake inputs so `brew tap` is never needed.
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    homebrew-speedtest = {
+      url = "github:teamookla/homebrew-speedtest";
+      flake = false;
+    };
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -44,6 +60,7 @@
               inherit inputs self outputs;
             };
             modules = [
+              inputs.nix-homebrew.darwinModules.nix-homebrew
               ./hosts/neptune/configuration.nix
             ];
           };

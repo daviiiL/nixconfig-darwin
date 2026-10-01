@@ -14,7 +14,7 @@ in {
     home.packages = with pkgs; [
       ripgrep
       prettierd
-      inputs.nixviii.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # inputs.nixviii.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 }

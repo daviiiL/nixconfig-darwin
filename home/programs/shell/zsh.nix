@@ -47,7 +47,9 @@ in {
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-        export PATH="$HOME/Dev/tooling/flutter/bin:$PATH"
+        # Appended, not prepended: Flutter bundles its own (older) Dart SDK, and
+        # the Nix-managed `dart` in ~/.nix-profile/bin must win on PATH.
+        export PATH="$PATH:$HOME/Dev/tooling/flutter/bin"
 
         export BUN_INSTALL="$HOME/.bun"
         export PATH="$BUN_INSTALL/bin:$PATH"
