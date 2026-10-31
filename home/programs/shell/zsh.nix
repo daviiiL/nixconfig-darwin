@@ -5,8 +5,15 @@
 }: let
   cfg = config.localHome.programs.shell.zsh;
 in {
-  options.localHome.programs.shell.zsh.enable =
-    lib.mkEnableOption "zsh shell configuration";
+  options.localHome.programs.shell.zsh = {
+    enable = lib.mkEnableOption "zsh shell configuration";
+
+    flakePath = lib.mkOption {
+      type = lib.types.str;
+      default = "${config.home.homeDirectory}/.config/nixconfig";
+      description = "Fallback location of this flake when it can't be detected from $PWD.";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     programs.zsh = {
@@ -18,15 +25,15 @@ in {
 
       dirHashes = {
         docs = "$HOME/Documents/";
-        nixconfig = "$HOME/.config/nixconfig/";
+        nixconfig = cfg.flakePath;
       };
+
+      sessionVariables.NIXCONFIG = cfg.flakePath;
 
       shellAliases = {
         ls = "eza --icons --group-directories-first";
         la = "eza -la --icons --group-directories-first";
         tree = "eza --tree --icons";
-        nixrebuild = "sudo darwin-rebuild switch --flake $HOME/.config/nixconfig";
-        switchhome = "home-manager switch --flake $HOME/.config/nixconfig";
       };
 
       history.size = 10000;
@@ -42,6 +49,22 @@ in {
         # Ported from pre-nix .zshrc; starship + direnv hooks are
         # injected by home-manager, so they are omitted here.
         [ -f "$HOME/.config/zshconfig/index.zsh" ] && source "$HOME/.config/zshconfig/index.zsh"
+
+        # Prefer the repo we're standing in (e.g. a worktree or second clone),
+        # but only if its flake.nix actually defines darwinConfigurations, so
+        # running these inside an unrelated flake project doesn't build it.
+        _nixconfig_root() {
+          local root
+          root=$(git rev-parse --show-toplevel 2>/dev/null)
+          if [[ -n $root ]] && grep -qs darwinConfigurations "$root/flake.nix"; then
+            print -r -- "$root"
+          else
+            print -r -- "''${NIXCONFIG:-${cfg.flakePath}}"
+          fi
+        }
+        nixrebuild() { sudo darwin-rebuild switch --flake "$(_nixconfig_root)" "$@"; }
+        switchhome() { home-manager switch --flake "$(_nixconfig_root)" "$@"; }
+        nixupdate()  { nix flake update --flake "$(_nixconfig_root)" "$@"; }
 
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

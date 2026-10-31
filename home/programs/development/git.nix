@@ -46,6 +46,7 @@ in {
 
         # Specific AI-generated directories
         "docs/superpowers/"
+        ".superpowers/"
 
         # Local development artifacts
         ".local/"
