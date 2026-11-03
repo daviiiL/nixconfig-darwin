@@ -11,7 +11,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     home.activation.darwinApps =
-      if pkgs.stdenv.isDarwin
+      if pkgs.stdenv.hostPlatform.isDarwin
       then let
         apps = pkgs.buildEnv {
           name = "home-manager-applications";
