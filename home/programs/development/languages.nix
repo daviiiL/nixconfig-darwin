@@ -26,6 +26,7 @@ in {
       dartLatest
       tree-sitter
       tectonic
+      phpactor
     ];
   };
 }
