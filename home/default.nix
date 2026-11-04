@@ -1,7 +1,6 @@
 {
   imports = [
     ./programs
-    ./theme
     ./platform
   ];
 }

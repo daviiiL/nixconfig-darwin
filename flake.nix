@@ -4,6 +4,9 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    # opencode 2.2.5 has a darwin node_modules hash mismatch; drop once fixed upstream.
+    nixpkgs-opencode.url = "github:nixos/nixpkgs/aa48d347080940b8a2b8d2f48228674e280a3514";
+
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,13 +41,17 @@
     };
   };
 
-  outputs = inputs @ {flake-parts, ...}:
+  outputs = inputs @ {flake-parts, ...}: let
+    host = {
+      name = "neptune";
+      user = "davidliu";
+      system = "aarch64-darwin";
+    };
+  in
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [];
 
-      systems = [
-        "aarch64-darwin"
-      ];
+      systems = [host.system];
 
       perSystem = {pkgs, ...}: {
         formatter = pkgs.alejandra;
@@ -54,24 +61,26 @@
         inherit (inputs) self nixpkgs nix-darwin home-manager;
         inherit (self) outputs;
       in {
+        overlays.default = import ./overlays {inherit inputs;};
+
         darwinConfigurations = {
-          neptune = nix-darwin.lib.darwinSystem {
+          ${host.name} = nix-darwin.lib.darwinSystem {
             specialArgs = {
-              inherit inputs self outputs;
+              inherit inputs self outputs host;
             };
             modules = [
               inputs.nix-homebrew.darwinModules.nix-homebrew
-              ./hosts/neptune/configuration.nix
+              ./hosts/${host.name}/configuration.nix
             ];
           };
         };
 
         homeConfigurations = {
-          "davidliu@neptune" = home-manager.lib.homeManagerConfiguration {
-            pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-            extraSpecialArgs = {inherit inputs outputs;};
+          "${host.user}@${host.name}" = home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.${host.system};
+            extraSpecialArgs = {inherit inputs outputs host;};
             modules = [
-              ./hosts/neptune/home.nix
+              ./hosts/${host.name}/home.nix
             ];
           };
         };

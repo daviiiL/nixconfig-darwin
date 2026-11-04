@@ -1,5 +1,6 @@
 {
   imports = [
-    # ./nixvim.nix
+    ./nixvim.nix
+    ./tree-sitter.nix
   ];
 }

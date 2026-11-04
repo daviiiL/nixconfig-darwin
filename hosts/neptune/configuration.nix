@@ -1,15 +1,33 @@
-{self, ...}: {
+{
+  self,
+  host,
+  ...
+}: {
   imports = [
-    ../../system/presets/macbook.nix
+    ../../system
   ];
 
-  networking.hostName = "neptune";
+  localSystem = {
+    core.settings.enable = true;
+    hardware.darwin.enable = true;
+    security.darwin.enable = true;
+    packages.core.enable = true;
+    packages.homebrew = {
+      enable = true;
+      brews = [
+        "neovim"
+        "teamookla/speedtest/speedtest"
+      ];
+    };
+  };
+
+  networking.hostName = host.name;
 
   system = {
     configurationRevision = self.rev or self.dirtyRev or null;
-    primaryUser = "davidliu";
+    primaryUser = host.user;
   };
 
-  nixpkgs.hostPlatform = "aarch64-darwin";
+  nixpkgs.hostPlatform = host.system;
   system.stateVersion = 6;
 }

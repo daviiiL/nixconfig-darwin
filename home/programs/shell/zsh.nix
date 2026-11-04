@@ -28,11 +28,14 @@ in {
         nixconfig = cfg.flakePath;
       };
 
-      sessionVariables.NIXCONFIG = cfg.flakePath;
+      sessionVariables = {
+        NIXCONFIG = cfg.flakePath;
+        EZA_COLORS = "gi=2;90";
+      };
 
       shellAliases = {
         ls = "eza --icons --group-directories-first";
-        la = "eza -la --icons --group-directories-first";
+        la = "eza -la --git --icons --group-directories-first";
         tree = "eza --tree --icons";
       };
 

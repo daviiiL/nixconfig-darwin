@@ -3,9 +3,9 @@
   lib,
   ...
 }: let
-  cfg = config.localHome.programs.terminals.ripgrep;
+  cfg = config.localHome.programs.cli.ripgrep;
 in {
-  options.localHome.programs.terminals.ripgrep.enable =
+  options.localHome.programs.cli.ripgrep.enable =
     lib.mkEnableOption "ripgrep (rg) fast recursive grep";
 
   config = lib.mkIf cfg.enable {

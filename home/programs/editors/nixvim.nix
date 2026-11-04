@@ -11,8 +11,9 @@ in {
     lib.mkEnableOption "nixviii (custom Neovim) and dev dependencies";
 
   config = lib.mkIf cfg.enable {
+    localHome.programs.cli.ripgrep.enable = true;
+
     home.packages = with pkgs; [
-      ripgrep
       prettierd
       # inputs.nixviii.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
